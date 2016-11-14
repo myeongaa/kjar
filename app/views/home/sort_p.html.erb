@@ -1,0 +1,9 @@
+
+    <% @company_s.each do |c| %>
+        <div class="sortp-box">
+            <a href="/home/company_p/<%=c.id%>"><%= c.name %></a></br>
+            <%= c.c_address %>
+            <%= c.tel %>
+            
+        </div>
+    <% end %>

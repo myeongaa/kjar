@@ -1,0 +1,54 @@
+<div class="row" >
+  <div class="col-md-2 "></div>
+  <div class="col-md-4" >
+    <div class="mypage-box">
+    <%= @c_user.email %></br>
+    <%= @c_user.name %></br>
+    <%= @c_user.phone %></br>
+    
+    <a href="/users/edit">회원정보수정</a>
+    </div>
+  </div>
+  <div class="col-md-4 " >
+    <div class="mypage-box">
+      현재 번호표</br>
+    <form method="post" >
+      <% @nticket2.each do |n| %>
+        <%= Company.where(:id => n.company_id)[0].name %>
+        <%= (n.created_at+32400).strftime("%Y-%d-%m %H:%M:%S") %>
+        <input type="hidden" name="company_id" id="nt_company_id">
+        <button type="submit" value="<%= Company.where(:id => n.company_id)[0].id %>" class="btn btn-default nticket_c">취소</button>
+        </br>
+      <% end %>
+      </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-2 "></div>
+</div>
+
+<script>
+
+
+$(function() {
+  $(".nticket_c").click(function(){
+    nticket_val =  this.value;
+      $.ajax({
+        method: "POST",
+        url: "/home/nticket_cancel",
+        data: { nticket_val: nticket_val },
+        success:function(){
+              alert("취소되었습니다.);
+              //document.location.reload(); 
+             // $("#reply_"+board_id).append("<p>"+content+"</p>");
+          },
+          error:function(){
+              alert("취소되지않았습니다.");
+          }
+      })
+       
+  })
+});
+
+ 
+</script>

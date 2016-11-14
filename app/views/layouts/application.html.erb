@@ -5,10 +5,57 @@
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="/main.css" />
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/earlyaccess/hanna.css">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script   src="https://code.jquery.com/jquery-3.1.1.js"   integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="   crossorigin="anonymous"></script>
+  <link href="/jquery-timepicker-master/jquery.timepicker.css" rel="stylesheet" />
+  <script src="/jquery-timepicker-master/jquery.timepicker.js"></script>
+  <script src="/jquery-timepicker-master/jquery.timepicker.min.js"></script>
+<script src="//d1p7wdleee1q2z.cloudfront.net/post/search.min.js"></script>
 </head>
 <body>
+<nav class="navbar navbar-fixed-top" role="navigation" style="background-color:#32495c;">
+        <div class="container">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <a href="/home/post">공지사항</a> |
+              <% if user_signed_in? %>
+                <%= current_user.email   %>님 |
+                <a href="/home/mypage/<%= current_user.id %>" method="post">마이페이지</a> |
+                <%= link_to('로그아웃', destroy_user_session_path, :method => :get) %>  
+              <% else %>
+                <%= link_to('로그인', new_user_session_path)  %>  
+              <% end %>       
+          </div>
+        </div>
+        
+        
+</nav>
+</br>
+</br>
 
+<br><br>
+
+<div style="text-align:center;" class="logo">
+    </br>
+    </br>
+    <a href="/home/index"><img src="/image/3.png"></a>
+    </br>
+    </br>
+    <br><br>
+</div>
 <%= yield %>
+
+
+  <div id="copyright">Copyright ⓒ권진아리</div>
 
 </body>
 </html>

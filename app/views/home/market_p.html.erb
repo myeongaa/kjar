@@ -1,0 +1,119 @@
+<div class="row" >
+  <div class="col-md-2 col-xs-1 col-sm-1"></div>
+  <div class="col-md-8 col-xs-10 col-sm-10" >
+    <div class="merong">
+      <a href="/home/index">홈</a> > <a href="/home/sort_p/<%=@sort.id %>"><%= @sort.name %></a>
+    </div></br>
+    <div class="company-name-box">
+      <span id="name"><%= @company_p.name %></span><span id="caddress">| <%= @company_p.c_address %></span>
+    </div>
+  </div>
+  <div class="col-md-2 col-xs-1 col-sm-1"></div>
+</div>
+
+
+<div class="row" >
+  <div class="col-md-2 "></div>
+  <div class="col-md-5" >
+    <div class="company-content-box">
+      *대기자*</br>
+      <form class="myform" name = "myForm" style="padding-top:30px;"method="POST" enctype="multipart/form-data">
+        <% @nticket.each do |n| %>
+          <% @user.each do |u| %>
+            <% if u.id == n.user_id %>
+               <input type="checkbox" name="check_ids[]" value="<%= u.id %>"> <%= u.name %> <%= u.phone %> </br>
+              
+            <% end %>
+          <% end %>
+        <% end %>
+        <input type="hidden" value="<%= @company2 %>" name="company_id">
+        
+        <input type ="submit" value="완료" onclick='mySubmit(1)' >
+      </form>
+    </div>
+  </div>
+  <div class="col-md-3" >
+    <div class="company-address-box">
+      <img src="/image/street.png">주소<img src="/image/street.png"></br>
+              <%= @company_p.c_postcode %></br>
+              <%= @company_p.c_address %></br>
+              <%= @company_p.c_daddress %></br></br>
+              <img src="/image/tel.png">전화번호<img src="/image/tel.png"></br>
+              <%= @company_p.tel %></br></br>
+              <img src="/image/open.png">영업시간<img src="/image/closed.png"></br>
+              <%= @company_p.opentime %> ~ <%= @company_p.closetime %></br></br>
+              
+              <img src="/image/map.png">지도<img src="/image/map.png"></br>
+              <div id="map-canvas" style="width:200px; height: 200px" title="도서관 위치입니다."></div> 
+    </div>
+  </div>
+  <div class="col-md-2 "></div>
+</div>
+
+
+ <script src="https://maps.googleapis.com/maps/api/js?callback=myMap"></script>
+
+<script>
+ function mySubmit(index) {
+      if (index == 1) {
+         
+        document.myForm.action='/home/nticket_d';  
+        
+      }
+    
+      document.myForm.submit();
+      
+    }
+    
+        var caddress = $("#caddress").text();
+
+ function initialize() {
+        var mapOptions = {
+                            zoom: 17, // 지도를 띄웠을 때의 줌 크기
+                            mapTypeId: google.maps.MapTypeId.ROADMAP
+                        };
+         
+         
+        var map = new google.maps.Map(document.getElementById("map-canvas"), // div의 id과 값이 같아야 함. "map-canvas"
+                                    mapOptions);
+         
+        var size_x = 40; // 마커로 사용할 이미지의 가로 크기
+        var size_y = 40; // 마커로 사용할 이미지의 세로 크기
+     
+        // 마커로 사용할 이미지 주소
+        var image = new google.maps.MarkerImage( '주소 여기에 기입!',
+                                                    new google.maps.Size(size_x, size_y),
+                                                    '',
+                                                    '',
+                                                    new google.maps.Size(size_x, size_y));
+         
+        // Geocoding *****************************************************
+        var address = caddress; // DB에서 주소 가져와서 검색하거나 왼쪽과 같이 주소를 바로 코딩.
+        var marker = null;
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode( { 'address': address}, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                map.setCenter(results[0].geometry.location);
+                marker = new google.maps.Marker({
+                                map: map,
+                                icon: image, // 마커로 사용할 이미지(변수)
+                                title: '한밭도서관', // 마커에 마우스 포인트를 갖다댔을 때 뜨는 타이틀
+                                position: results[0].geometry.location
+                            });
+ 
+                var content = "한밭도서관<br/><br/>Tel: 042-580-4114"; // 말풍선 안에 들어갈 내용
+             
+                // 마커를 클릭했을 때의 이벤트. 말풍선 뿅~
+                var infowindow = new google.maps.InfoWindow({ content: content});
+                google.maps.event.addListener(marker, "click", function() {infowindow.open(map,marker);});
+            } else {
+                alert("Geocode was not successful for the following reason: " + status);
+            }
+        });
+        // Geocoding // *****************************************************
+         
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
+
+</script>
+

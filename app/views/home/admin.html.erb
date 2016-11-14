@@ -1,0 +1,25 @@
+
+<a href="/home/index">홈</a></br>
+<a href="/users/sign_in">로그인</a></br>
+<a href="/users/sign_up">회원가입</a></br>
+<a href="/users/sign_out">로그아웃</a></br>
+<a href="/home/company">업체관리페이지</a></br>
+<a href="/home/company_add">업체추가페이지</a></br></br>
+
+고객마이페이지</br>
+<% @user.each do |u| %>
+    <a href="/home/mypage2/<%=u.id %> "><%=u.name%></a></br>
+<% end %>
+</br>
+</br>
+업체페이지</br>
+<% @company.each do |c| %>
+    <a href="/home/company_p/<%= c.id %>"><%= c.name %></a></br>
+<% end %>
+</br>
+</br>
+업체전용페이지</br>
+<% @company.each do |c| %>
+    <a href="/home/market_p/<%=c.id %>"><%= c.name %></a></br>
+<% end %>
+</br></br>

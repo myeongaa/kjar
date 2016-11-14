@@ -1,8 +1,32 @@
 Rails.application.routes.draw do
  devise_for :users, :controllers => { registrations: 'registrations' } 
  root 'home#index'
- get 'home/index'
-
+ 
+ get 'home/index'     #홈
+ get 'home/mypage/:user_id'=>"home#mypage"   #고객마이페이지
+ post 'home/mypage/:user_id'=>"home#mypage"
+ get 'home/mypage2/:user_id'=>"home#mypage2"
+ get 'home/company_p/:company_id'=>"home#company_p"  #업체별페이지
+ post 'home/company_p/:company_id'=>"home#company_p"  #업체별페이지
+ get 'home/company' #업체관리페이지
+ get 'home/company_add' #업체등록
+ post 'home/company_add2' #업체등록2
+ post 'home/sort_add'
+ get 'home/sort_p/:csort_id' =>"home#sort_p" #분류별로업체봄
+ post 'home/nticket'        #번호표뽑기
+ get 'home/post'     #공지사항
+ get 'home/post_write'  #공지사항올리기
+ post 'home/post_write2' 
+ get 'home/post_p/:post_id'=>"home#post_p"
+ get 'home/mycompany/:com' =>"home#mycompany"  #자기업체보기
+ get 'home/c_manage'
+ post 'home/c_manage2'
+ get 'home/market_p/:company_id' =>"home#market_p"
+ post 'home/nticket_d'
+ get 'home/admin'
+ post 'home/search'
+ post 'home/nticket_cancel'
+ 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

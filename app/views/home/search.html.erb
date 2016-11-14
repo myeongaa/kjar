@@ -1,0 +1,9 @@
+
+
+<% @search2.each do |s| %>
+    <div class="sortp-box">
+        <a href="/home/company_p/<%= s.id %>"><%= s.name %></a></br>
+        <%= s.c_address %>
+        <%= s.tel %>
+    </div>
+<% end %>

@@ -1,0 +1,68 @@
+
+
+
+    <form method="post" class="myform" name = "myForm" >
+     
+     
+     <div class="main2">
+  <div class="row" >
+      <div class="col-md-2"></div>
+      <div class="col-md-8 col-xs-12 col-sm-12" id="box" >
+        
+         <div class="form-group">
+        <label for="exampleInputEmail1">이름</label>
+        <input type="text" class="form-control" id="c_name" placeholder="이름" name="name">
+      </div>
+         <div class="form-group">
+           
+           
+           <label>주소등록</label><br>
+       <!-- 주소와 우편번호를 입력할 <input>들을 생성하고 적당한 name과 class를 부여한다 -->
+      우편번호<input type="text" name="c_postcode" class="postcodify_postcode5" value="" />
+      <button id="postcodify_search_button" type="button">검색</button><br />
+      도로명 주소<input type="text" name="c_address" class="postcodify_address" value="" /><br />
+      상세 주소<input type="text" name="c_daddress" class="postcodify_details" value="" /><br />
+
+
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1">전화번호</label>
+        <input type="number" class="form-control" id="c_tel" placeholder="전화번호" name="tel">
+      </div>
+      
+      <div class="form-group">
+        <label for="exampleInputEmail1">오픈시간</label>
+        <input class="timepic" id="opentime" type="text" name="opentime">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1">마감시간</label>
+        <input class="timepic" id="closetime" type="text" name="closetime">
+      </div>
+     
+      <select class="form-control" name="sort">
+        <option value="">분류선택</option>
+        <% @sort.each do |s| %>
+            <option value="<%= s.id %>"><%=s.name %></option>
+        <% end %>
+    </select>
+      <button type="submit" class="btn btn-default" onclick='mySubmit(1)'>Submit</button>
+    </form>
+
+  <script>
+    $('.timepic').timepicker();
+
+    function mySubmit(index) {
+      if (index == 1) {
+         
+        document.myForm.action='/home/company_add2';  
+        document.myForm.submit();
+      }
+    
+      
+      
+    }
+$(function() { $("#postcodify_search_button").postcodifyPopUp(
+  
+  ); }); 
+ 
+</script>

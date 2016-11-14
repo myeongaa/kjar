@@ -1,9 +1,42 @@
-<% if user_signed_in? %>
-  <li>
-  <%= link_to('로그아웃', destroy_user_session_path, :method => :delete) %>        
-  </li>
-<% else %>
-  <li>
-  <%= link_to('로그인', new_user_session_path)  %>  
-  </li>
+
+
+<!--
+<select class="form-control" onchange="location.href=this.value"  style="cursor:pointer">
+    <option value=""></option>
+    <% @sort.each do |s| %>
+        <option value="/home/sort_p/<%= s.id %>"><%=s.name %></option>
+    <% end %>
+</select>
+
+<% @company.each do |c| %>
+  <a href="/home/company_p/<%=c.id %>"><%= c.name %></a></br>
 <% end %>
+
+
+-->
+
+
+
+<form class="searchbox" action="/home/search" method="post">
+    <div class="search">
+        <input type="text" id="searchb" name="search" placeholder="    업소명을 입력해주세요.">
+        <span><button type="image" id="searchimg" src="/image/search.png"><img src="/image/search.png"></button></span>     
+    </div>
+</form>
+
+<div class="row" id="sort_p">
+  <div class="col-md-2"></div>
+  <div class="col-md-2 col-xs-3 col-sm-3" class="sort"><a href="/home/sort_p/1"><span data-tooltip-text="병원"><img src="/image/hospital.png"></span></a></div>
+  <div class="col-md-1"></div>
+  <div class="col-md-2 col-xs-3 col-sm-3"class="sort"><a href="/home/sort_p/2"><span data-tooltip-text="음식점"><img src="/image/restaurant.png"></span></a></div>
+  <div class="col-md-1"></div>
+  <div class="col-md-2 col-xs-3 col-sm-3"class="sort"><a href="/home/sort_p/3"><span data-tooltip-text="미용실"><img src="/image/hair.png"></span></a></div>
+  <div class="col-md-2"></div>
+  
+</div>
+
+
+</br></br></br>
+<a href="/home/admin">관리자페이지</a>
+
+

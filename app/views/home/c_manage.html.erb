@@ -1,0 +1,44 @@
+<form class="myform" name = "myForm" style="padding-top:30px;"method="POST" enctype="multipart/form-data">
+    <% @user.each do |u| %>
+        <input type="checkbox" name="user_ids[]" value="<%= u.id %>" style="cursor:pointer"/><%=u.name %></br>
+    
+    <% end %>
+    </br></br></br>
+    <% @company.each do |c| %>
+        <input type="checkbox" name="company_ids[]" valaddressue="<%= c.id %>" style="cursor:pointer"/><%=c.name%>
+    <% end %>
+    
+    <input type="submit" class="btn btn-default" value="슉" onclick='mySubmit(1)' id="bu">
+     
+</form>
+<script>
+    $("input:checkbox").on('click', function() {
+  // in the handler, 'this' refers to the box clicked on
+  var $box = $(this);
+  if ($box.is(":checked")) {
+    // the name of the box is retrieved using the .attr() method
+    // as it is assumed and expected to be immutable
+    var group = "input:checkbox[name='" + $box.attr("name") + "']";
+    // the checked state of the group/box on the other hand will change
+    // and the current value is retrieved using .prop() method
+    $(group).prop("checked", false);
+    $box.prop("checked", true);
+  } else {
+    $box.prop("checked", false);
+  }
+});
+
+ function mySubmit(index) {
+      if (index == 1) {
+         
+        document.myForm.action='/home/c_manage2';  
+        
+      }
+     
+      
+    
+      
+      document.myForm.submit();
+      
+    }
+</script>

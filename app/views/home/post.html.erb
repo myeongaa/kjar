@@ -1,0 +1,6 @@
+<% if can? :create, Post %>
+    <a href="/home/post_write">쓰기</a></br>
+<% end %>
+<% @post.each do |p| %>
+    <a href="/home/post_p/<%= p.id %>"><%= p.title %></a></br>
+<% end %>
