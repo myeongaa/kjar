@@ -26,6 +26,11 @@ Rails.application.routes.draw do
  get 'home/admin'
  post 'home/search'
  post 'home/nticket_cancel'
+ get 'home/reservation/:company_id' => "home#reservation"
+ post 'home/reservation_add'
+ get 'home/reservation2/:reservation_id'=>"home#reservation2"
+ post 'home/reserve_confirm'
+ post 'home/reserve_reject'
  
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

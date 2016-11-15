@@ -43,19 +43,24 @@
               <% else %>
                 <button type="image" disabled='disabled' ><img src="/image/no_ticket.png"style="opacity:0.5;"></button>
               <% end %>
-              
+              </br>
+              대기인원 : <%= @nticket.length %></br>
               <div class="ticket-people">
+              
               *대기자*</br>
               <div class="ticket-people2">
               <% @nticket.each do |n| %>
                 <% @user.each do |u| %>
                   <% if u.id == n.user_id %>
-                   <%=  u.name %></br>
+                   <%= n.ticketnumber %>번 <%=  u.name %></br>
                   <% end %>
                 <% end %>
               <% end %>
-              </div>
-              대기인원 : <%= @nticket.length %></br>
+              </div></br>
+              <a href="/home/reservation/<%= @company_p.id %>">예약하기</a></br>
+              
+              <span style="color:red;">당일 예약은 불가능 합니다. 전날까지만 가능합니다.</span></br>
+              <span style="color:red;">예약은 취소되지 않습니다.</span></br>
               </br></br></br></br></br></br>
             </div>
           </form>

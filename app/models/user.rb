@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
   
   has_many :posts
   has_many :ntickets
+  has_many :reservations
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
          

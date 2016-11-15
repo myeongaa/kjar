@@ -21,6 +21,9 @@ class HomeController < ApplicationController
       @company << Company.where(:id => n.company_id)
     end
     
+    @reservation = Reservation.where(:user_id => current_user)
+    
+    
   end
   
   def mypage2
@@ -37,6 +40,7 @@ class HomeController < ApplicationController
     @nticket = Nticket.where("company_id LIKE ?",params[:company_id])
     @nticket3 = @nticket.where(:user_id => current_user).length
     @sort = Csort.where(:id=> @company_p.csort_id)[0]
+    
     
   end
   
@@ -86,7 +90,13 @@ class HomeController < ApplicationController
     ntic = Nticket.new
     ntic.user_id = current_user.id
     ntic.company_id = params[:company_id]
+    @nticketmax = Company.where(:id => params[:company_id])[0].nticket_max
+    ntic.ticketnumber = @nticketmax
     ntic.save
+    
+    company = Company.where(:id => params[:company_id])[0]
+    company.nticket_max = @nticketmax+1
+    company.save
     
     
     redirect_to(request.env['HTTP_REFERER']) 
@@ -141,8 +151,12 @@ class HomeController < ApplicationController
   def market_p
     @company = Company.all
     @user = User.all
+
     @company2 = params[:company_id]
     @company_p = Company.where("id LIKE ?",params[:company_id])[0]
+    @reservation = Reservation.where("company_id LIKE ?",params[:company_id])
+    
+    
     
     @nticket = Nticket.where("company_id LIKE ?",params[:company_id])
     @sort = Csort.where(:id=> @company_p.csort_id)[0]
@@ -166,7 +180,6 @@ class HomeController < ApplicationController
   def nticket_cancel
     @nticket = params[:nticket_val]
     Nticket.where(:company_id => @nticket, :user_id => current_user).destroy_all
-    redirect_to(request.env['HTTP_REFERER'])   
   end
   
   def admin
@@ -179,6 +192,53 @@ class HomeController < ApplicationController
     @search = params[:search]
     
     @search2 = Company.where("name LIKE?","%#{@search}%")
+  end
+  
+  def reservation
+    @company_id = params[:company_id]
+    
+    
+  end
+  
+  def reservation_add
+    reserve = Reservation.new
+    reserve.user_id = current_user.id
+    reserve.company_id = params[:company_id]
+    reserve.reserve_time = params[:reserve_time]
+    reserve.reserve_date = params[:reserve_date]
+    reserve.person_num = params[:person_num]
+    reserve.requestmenu = params[:requestmenu]
+    reserve.save
+    
+    redirect_to "/home/index"
+  end
+  
+  def reservation2
+    @reserve_id = params[:reservation_id]
+    @reservation = Reservation.where(:id => @reserve_id)[0]
+    
+    @user = User.where(:id=>@reservation.user_id)[0]
+    @company = Company.where(:id => @reservation.company_id)[0]
+  end
+  
+  
+  
+  def reserve_confirm
+    @reservation = Reservation.where(:id => params[:reservation_id])[0]
+    @reservation.confirm_num = "2"
+    @reservation.comment = params[:comment]
+    @reservation.save
+    
+    redirect_to(request.env['HTTP_REFERER'])
+  end
+  
+  def reserve_reject
+    @reservation = Reservation.where(:id => params[:reservation_id])[0]
+    @reservation.confirm_num = "3"
+    @reservation.comment = params[:comment]
+    @reservation.save
+    
+    redirect_to(request.env['HTTP_REFERER'])
   end
 
 end

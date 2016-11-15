@@ -30,6 +30,31 @@
         
         <input type ="submit" value="완료" onclick='mySubmit(1)' >
       </form>
+      *예약대기자*</br>
+      <% @reservation.each do |r| %>
+        <% if r.confirm_num.to_s=="1" %>
+          <% @user.each do |u| %>
+            <% if u.id == r.user_id %>
+              <a href="/home/reservation2/<%=r.id%>"><%= u.name %></a></br>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+      
+      *예약자*</br>
+      
+      <% @reservation.each do |r| %>
+        <% if r.confirm_num.to_s=="2" %>
+          <% @user.each do |u| %>
+            <% if u.id == r.user_id %>
+              <a href="/home/reservation2/<%=r.id%>"><%= u.name %></a></br>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+      
+      
+      
     </div>
   </div>
   <div class="col-md-3" >
@@ -54,6 +79,28 @@
  <script src="https://maps.googleapis.com/maps/api/js?callback=myMap"></script>
 
 <script>
+$(function() {
+  $(".reserve_confirm").click(function(){
+    reserve_confirm =  this.value;
+      $.ajax({
+        method: "POST",
+        url: "/home/reserve_confirm",
+        data: { reserve_confirm: reserve_confirm },
+        success:function(){
+              alert("승인완료.");
+              //document.location.reload(); 
+             // $("#reply_"+board_id).append("<p>"+content+"</p>");
+          },
+          error:function(){
+              alert("승인되지않았습니다.");
+          }
+      })
+       
+  })
+});
+
+
+
  function mySubmit(index) {
       if (index == 1) {
          
@@ -114,6 +161,7 @@
          
     }
     google.maps.event.addDomListener(window, 'load', initialize);
+
 
 </script>
 

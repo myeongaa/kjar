@@ -1,0 +1,72 @@
+
+    <form method="post" class="myform" name = "myForm" >
+     
+     
+     <div >
+  <div class="row" >
+      <div class="col-md-2"></div>
+      <div class="col-md-8 col-xs-12 col-sm-12" id="box" >
+      <input type="hidden" name="company_id" value="<%= @company_id %>">
+      <div class="form-group">
+        <label for="exampleInputEmail1">예약시간</label>
+        <input class="timepic" id="reserve_time" type="text" name="reserve_time">
+      </div>
+      
+       <div class="form-group">
+        <label for="exampleInputEmail1">예약날짜</label>
+        <input type="text" class="datepic" name="reserve_date">        
+        </div>
+      
+      
+      
+      <div class="form-group">
+        <label for="exampleInputEmail1">인원</label>
+        <input type="number" class="form-control" id="person_num" placeholder="인원" name="person_num">
+      </div>
+      
+      <div class="form-group">
+        <label for="exampleInputEmail1">요청사항</label>
+        <input type="text" class="form-control" id="request" placeholder="요청사항" name="requestmenu">
+      </div>
+     
+      <button type="submit" class="btn btn-default" onclick='mySubmit(1)'>Submit</button>
+    </form>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+  <script>
+  $(function() {
+      
+  $( ".datepic" ).datepicker({
+            
+showOn: 'both',buttonText: "달력",changeMonth: true,changeYear: true,yearRange: 'c-99:c+99',constrainInput: true,maxDate: '+1y',beforeShowDay: noBefore  
+
+
+     });
+    });;
+    
+    function noBefore(date){
+    if (date <= new Date())
+        return [false];
+    return [true];
+}
+
+    $('.timepic').timepicker();
+    
+
+    function mySubmit(index) {
+      if (index == 1) {
+         
+        document.myForm.action='/home/reservation_add';  
+        document.myForm.submit();
+      }
+    
+      
+      
+    }
+$(function() { $("#postcodify_search_button").postcodifyPopUp(
+  
+  ); }); 
+  //script구문 내부에 해당 메소드를 입력합니다.
+
+ 
+</script>
