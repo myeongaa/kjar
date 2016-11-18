@@ -1,7 +1,32 @@
+<nav class="navbar navbar-fixed-top" role="navigation" style="background-color:#32495c;">
+        <div class="container">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <a href="/home/post">공지사항</a> |
+              <% if user_signed_in? %>
+                <%= current_user.email   %>님 |
+                <a href="/home/mypage/<%= current_user.id %>" method="post">마이페이지</a> |
+                <%= link_to('로그아웃', destroy_user_session_path, :method => :get) %>  
+              <% else %>
+                <%= link_to('로그인', new_user_session_path)  %>  
+              <% end %>       
+          </div>
+        </div>
+        
+        
+</nav>
+</br>
+</br>
 
+<br><br>
 
-
-
+<div style="text-align:center;" class="logo">
+    </br>
+    </br>
+    <a href="/home/index"><img src="/image/gggg.png"></a>
+    </br>
+    </br>
+    <br><br>
+</div>
 
 
 <div class="row" >
@@ -12,6 +37,11 @@
     </div></br>
     <div class="company-name-box">
       <span id="name"><%= @company_p.name %></span><span id="caddress">| <%= @company_p.c_address %></span>
+      <% if @company_p.openclose == 1 %>
+        <span id="caddress"style="float:right; padding-right: 10px;">OPEN</span>
+      <% else %>
+        <span id="caddress"style="float:right; padding-right: 10px;">CLOSE</span>
+      <% end %>
     </div>
   </div>
   <div class="col-md-2 col-xs-1 col-sm-1"></div>
@@ -34,14 +64,21 @@
             </div>
             <div class="ticket-box">
               <span>*번호표는 중복해서 뽑을 수 없습니다.*</span></br>
-              <% if user_signed_in? %>
-                <% if @nticket3 < 1 %>
-                <button type="image" ><img src="/image/ticket.png"></button>
-                <% else %>
-                <button type="image" disabled='disabled' ><img src="/image/no_ticket.png" style="opacity:0.5;"></button>
-                <% end %>
+              <% if @company_p.openclose == 1 %>
+                  <% if user_signed_in? %>
+                    <% if @nticket3 < 1 %>
+                    <button type="image" ><img src="/image/ticket.png"></button>
+                    <% else %>
+                    <button type="image" disabled='disabled' ><img src="/image/no_ticket.png" style="opacity:0.5;"></button>
+                    <% end %>
+                  <% else %>
+                    로그인 후에 이용 가능합니다.</br>
+                    <button type="image" disabled='disabled' ><img src="/image/no_ticket.png"style="opacity:0.5;"></button>
+                  <% end %>
               <% else %>
-                <button type="image" disabled='disabled' ><img src="/image/no_ticket.png"style="opacity:0.5;"></button>
+                현재 오픈시간이 아니므로 번호표 서비스를 이용할 수 없습니다.
+                 <button type="image" disabled='disabled' ><img src="/image/no_ticket.png"style="opacity:0.5;"></button>
+
               <% end %>
               </br>
               대기인원 : <%= @nticket.length %></br>
@@ -57,8 +94,16 @@
                 <% end %>
               <% end %>
               </div></br>
-              <a href="/home/reservation/<%= @company_p.id %>">예약하기</a></br>
-              
+               <% if user_signed_in? %>
+                 <% if @reservation2 > 0  %>
+                  <a >예약하기</a></br>
+                 <% else%>
+                  <a href="/home/reservation/<%= @company_p.id %>">예약하기</a></br>
+                 <% end %>
+              <% else %>
+                  <a >예약하기</a></br>
+               <% end %>
+
               <span style="color:red;">당일 예약은 불가능 합니다. 전날까지만 가능합니다.</span></br>
               <span style="color:red;">예약은 취소되지 않습니다.</span></br>
               </br></br></br></br></br></br>

@@ -1,10 +1,11 @@
+
 <nav class="navbar navbar-fixed-top" role="navigation" style="background-color:#32495c;">
         <div class="container">
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-              <a href="/home/post">공지사항</a> |
+              <a href="/home/app_post">공지사항</a> |
               <% if user_signed_in? %>
                 <%= current_user.email   %>님 |
-                <a href="/home/mypage/<%= current_user.id %>" method="post">마이페이지</a> |
+                <a href="/home/app_mypage/<%= current_user.id %>" method="post">마이페이지</a> |
                 <%= link_to('로그아웃', destroy_user_session_path, :method => :get) %>  
               <% else %>
                 <%= link_to('로그인', new_user_session_path)  %>  
@@ -22,100 +23,90 @@
 <div style="text-align:center;" class="logo">
     </br>
     </br>
-    <a href="/home/index"><img src="/image/gggg.png"></a>
+    <a href="/home/app_index"><img src="/image/gggg.png"></a>
     </br>
     </br>
     <br><br>
 </div>
 
+
 <div class="row" >
   <div class="col-md-2 col-xs-1 col-sm-1"></div>
   <div class="col-md-8 col-xs-10 col-sm-10" >
     <div class="merong">
-      <a href="/home/index">홈</a> > <a href="/home/sort_p/<%=@sort.id %>"><%= @sort.name %></a>
+      <a href="/home/app_index">홈</a> > <a href="/home/app_sort_p/<%=@sort.id %>"><%= @sort.name %></a>
     </div></br>
     <div class="company-name-box">
       <span id="name"><%= @company_p.name %></span><span id="caddress">| <%= @company_p.c_address %></span>
-      <% if @company_p.openclose == 1 %>
-        <span id="caddress"style="float:right; padding-right: 10px;">OPEN</span>
-      <% else %>
-        <span id="caddress"style="float:right; padding-right: 10px;">CLOSE</span>
-      <% end %>
     </div>
   </div>
   <div class="col-md-2 col-xs-1 col-sm-1"></div>
 </div>
+
+
 
 
 <div class="row" >
   <div class="col-md-2 "></div>
   <div class="col-md-5" >
     <div class="company-content-box">
-     
-
       
-      <form class="myform" name = "myForm" style="padding-top:30px;"method="POST" enctype="multipart/form-data">
-         <input type="hidden" value="<%= params[:company_id]%>" name="company_id" >
-
-      <% if @company_p.openclose == 1 %>
-
-        <input type="submit" class="btn btn-default" disabled="disabled" value="open">
-        <input type="submit" class="btn btn-default" onclick='mySubmit(4)' value="close"></br>
-
-      <% elsif  @company_p.openclose == 2 %>
-        <input type="submit"  class="btn btn-default" onclick='mySubmit(3)' value="open">
-        <input type="submit" class="btn btn-default" disabled="disabled" value="close" ></br>
-      <% end %>
-      </br>
-
-
-        <input type ="submit" value="현장에서 번호표 뽑기" onclick='mySubmit(2)' ></br></br>
-      *대기자*</br>
-        <% @nticket.each do |n| %>
-          <% if n.user_id == 0 %>
-            <!--<input type="checkbox" name="check_ids[]">--> 
-            <%= n.ticketnumber %>번  <%= n.user_name %> <%= n.user_phone %> 
-            <button type="submit" class="btn btn-default nticket_complete" value="<%=n.id %>">완료</button></br>
-          <% else %>
-            <% @user.each do |u| %>
-              <% if u.id == n.user_id %>
-                 <!--<input type="checkbox" name="check_ids[]" value="<%= u.id %>"> -->
-                 <%= n.ticketnumber %>번  <%= u.name %> <%= u.phone %> <button type="submit" class="btn btn-default nticket_complete" value="<%=n.id %>">완료</button></br>
+      <div class="row" >
+        <div class="col-md-1 col-xs-1 col-sm-1"></div>
+        <div class="col-md-10 col-xs-10 col-sm-10" >
+          <form method="post" action="/home/nticket" id="nticketsumbit">
+            <div class="form-group">
+              <input type="hidden" class="form-control" value="<%= @company_p.id %>" name="company_id">
+            </div>
+            <div class="ticket-box">
+              <span>*번호표는 중복해서 뽑을 수 없습니다.*</span></br>
+              <% if user_signed_in? %>
+                <% if @nticket3 < 1 %>
+                <button type="image" ><img src="/image/ticket.png"></button>
+                <% else %>
+                <button type="image" disabled='disabled' ><img src="/image/no_ticket.png" style="opacity:0.5;"></button>
+                <% end %>
+              <% else %>
+                <button type="image" disabled='disabled' ><img src="/image/no_ticket.png"style="opacity:0.5;"></button>
               <% end %>
-            <% end %>
-          <% end %>
-        <% end %>
+              </br>
+              대기인원 : <%= @nticket.length %></br>
+              <div class="ticket-people">
+              
+              *대기자*</br>
+              <div class="ticket-people2">
+              <% @nticket.each do |n| %>
+                <% @user.each do |u| %>
+                  <% if u.id == n.user_id %>
+                   <%= n.ticketnumber %>번 <%=  u.name %></br>
+                  <% end %>
+                <% end %>
+              <% end %>
+              </div></br>
+               <% if user_signed_in? %>
+                 <% if @reservation2 > 0  %>
+                  <a >예약하기</a></br>
+                 <% else%>
+                  <a href="/home/app_reservation/<%= @company_p.id %>">예약하기</a></br>
+                 <% end %>
+              <% else %>
+                  <a >예약하기</a></br>
+               <% end %>
 
-        <!--<input type ="submit" value="완료" onclick='mySubmit(1)' >-->
-      </form></br>
-      *예약대기자*</br>
-      <% @reservation.each do |r| %>
-        <% if r.confirm_num.to_s=="1" %>
-          <% @user.each do |u| %>
-            <% if u.id == r.user_id %>
-              <a href="/home/reservation2/<%=r.id%>"><%= u.name %></a></br>
-            <% end %>
-          <% end %>
-        <% end %>
-      <% end %>
-      </br>
-      *예약자*</br>
-      
-      <% @reservation.each do |r| %>
-        <% if r.confirm_num.to_s=="2" %>
-          <% @user.each do |u| %>
-            <% if u.id == r.user_id %>
-              <a href="/home/reservation2/<%=r.id%>"><%= u.name %></a></br>
-            <% end %>
-          <% end %>
-        <% end %>
-      <% end %>
-      
+              <span style="color:red;">당일 예약은 불가능 합니다. 전날까지만 가능합니다.</span></br>
+              <span style="color:red;">예약은 취소되지 않습니다.</span></br>
+              </br></br></br></br></br></br>
+            </div>
+          </form>
+        </div>
+        </div>
+        <div class="col-md-1 col-xs-1 col-sm-1"></div>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="col-md-3" >
-    <div class="company-address-box">
-      <img src="/image/street.png">주소<img src="/image/street.png"></br>
+    <div class="col-md-3">
+          <div class="company-address-box">
+              <img src="/image/street.png">주소<img src="/image/street.png"></br>
               <%= @company_p.c_postcode %></br>
               <%= @company_p.c_address %></br>
               <%= @company_p.c_daddress %></br></br>
@@ -126,65 +117,16 @@
               
               <img src="/image/map.png">지도<img src="/image/map.png"></br>
               <div id="map-canvas" style="width:200px; height: 200px" title="도서관 위치입니다."></div> 
+
+          </div>
     </div>
+    <div class="col-md-2 "></div>
   </div>
-  <div class="col-md-2 "></div>
-</div>
-
-
+    
+ 
  <script src="https://maps.googleapis.com/maps/api/js?callback=myMap"></script>
-
 <script>
-$(function() {
-  $(".nticket_complete").click(function(){
-    nticket_id =  this.value;
-      $.ajax({
-        method: "POST",
-        url: "/home/nticket_d",
-        data: { nticket_id: nticket_id },
-        success:function(){
-              alert("완료.");
-              //document.location.reload(); 
-             // $("#reply_"+board_id).append("<p>"+content+"</p>");
-          },
-          error:function(){
-              alert("완료되지않았습니다.다시 시도해주세요");
-          }
-      })
-       
-  })
-});
-
-
-
-
- function mySubmit(index) {
-   var company_id = $('#company_id').val();
-      if (index == 1) {
-         
-        document.myForm.action='/home/nticket_d';  
-        
-      }
-      
-      
-      else if (index == 3) {
-         
-        document.myForm.action='/home/open' ;  
-        
-      }
-      
-      else if (index == 4) {
-         
-        document.myForm.action='/home/close';  
-        
-      
-      }
-    
-      document.myForm.submit();
-      
-    }
-    
-        var caddress = $("#caddress").text();
+      var caddress = $("#caddress").text();
 
  function initialize() {
         var mapOptions = {
@@ -233,7 +175,9 @@ $(function() {
          
     }
     google.maps.event.addDomListener(window, 'load', initialize);
-
-
+    
+    $('#nticketsumbit').submit(function() {
+    var c = confirm("번호표를 뽑겠습니까?");
+    return c; //you can just return c because it will be true or false
+});
 </script>
-

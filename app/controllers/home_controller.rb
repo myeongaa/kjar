@@ -3,8 +3,12 @@ class HomeController < ApplicationController
     @c_user = current_user
     @company = Company.all
     @sort = Csort.all
-    
-
+  end
+  
+  def app_index    #홈페이지
+    @c_user = current_user
+    @company = Company.all
+    @sort = Csort.all
   end
   
   def mypage     #고객마이페이지
@@ -26,7 +30,34 @@ class HomeController < ApplicationController
     
   end
   
+  
+  
+   def app_mypage     #고객마이페이지
+    if user_signed_in?
+      @c_user = current_user
+    else
+      redirect_to "/users/sign_in"
+    end
+    
+    @company = []
+    @nticket = Nticket.all
+    @nticket2 = Nticket.where(:user_id => current_user)
+    @nticket2.each do |n|
+      @company << Company.where(:id => n.company_id)
+    end
+    
+    @reservation = Reservation.where(:user_id => current_user)
+    
+    
+  end
+  
   def mypage2
+    @user = User.all
+    @user2 = User.whㄴㄴㄷㄴㄷㅁere("id LIKE ?",params[:user_id])[0]
+    
+  end
+  
+  def app_mypage2
     @user = User.all
     @user2 = User.where("id LIKE ?",params[:user_id])[0]
     
@@ -40,6 +71,26 @@ class HomeController < ApplicationController
     @nticket = Nticket.where("company_id LIKE ?",params[:company_id])
     @nticket3 = @nticket.where(:user_id => current_user).length
     @sort = Csort.where(:id=> @company_p.csort_id)[0]
+    
+    @reservation = Reservation.where("company_id LIKE ?",params[:company_id])
+    @reservation1 = @reservation.where("confirm_num LIKE ?",1)
+    @reservation2 = @reservation1.where(:user_id => current_user).length
+    
+    
+  end
+  
+  def app_company_p       #업체페이지
+    @company = Company.all
+    @user = User.all
+    @company_p = Company.where("id LIKE ?",params[:company_id])[0]
+    @nticket2 = Nticket.all
+    @nticket = Nticket.where("company_id LIKE ?",params[:company_id])
+    @nticket3 = @nticket.where(:user_id => current_user).length
+    @sort = Csort.where(:id=> @company_p.csort_id)[0]
+    
+    @reservation = Reservation.where("company_id LIKE ?",params[:company_id])
+    @reservation1 = @reservation.where("confirm_num LIKE ?",1)
+    @reservation2 = @reservation1.where(:user_id => current_user).length
     
     
   end
@@ -84,6 +135,12 @@ class HomeController < ApplicationController
     
   end
   
+  def app_sort_p   #분류별로업체보기
+    @sort = Csort.all
+    @company_s = Company.where("csort_id LIKE ?",params[:csort_id])
+    
+  end
+  
   def nticket   #대기표뽑는페이지
    
     @nticket = Nticket.all
@@ -102,12 +159,44 @@ class HomeController < ApplicationController
     redirect_to(request.env['HTTP_REFERER']) 
   end
   
+  def real_nticket
+    @nticket = Nticket.new
+    @company_id = params[:company_id]
+    @company_p = Company.where(:id => @company_id)[0]
+    @sort = Csort.where(:id=> @company_p.csort_id)[0]
+  end
+  
+  def real_nticket_add
+    real_nticket = Nticket.new
+    real_nticket.user_id = 0
+    real_nticket.company_id = params[:company_id]
+    real_nticket.user_name = params[:user_name]
+    real_nticket.user_phone = params[:user_phone]
+    @nticketmax = Company.where(:id => params[:company_id])[0].nticket_max
+    real_nticket.ticketnumber = @nticketmax
+    real_nticket.save
+    
+    company = Company.where(:id => params[:company_id])[0]
+    company.nticket_max = @nticketmax+1
+    company.save
+    
+  end
+  
   def post
     @post = Post.all
     @user = current_user
   end
   
+  def app_post
+    @post = Post.all
+    @user = current_user
+  end
+  
   def post_p
+    @post = Post.all
+  end
+
+  def app_post_p
     @post = Post.all
   end
   
@@ -156,23 +245,38 @@ class HomeController < ApplicationController
     @company_p = Company.where("id LIKE ?",params[:company_id])[0]
     @reservation = Reservation.where("company_id LIKE ?",params[:company_id])
     
-    
-    
     @nticket = Nticket.where("company_id LIKE ?",params[:company_id])
     @sort = Csort.where(:id=> @company_p.csort_id)[0]
   end
   
+  def open
+    @company_id = params[:company_id]
+    @company = Company.where(:id => params[:company_id])[0]
+    @company.openclose = "1"
+    @company.save
+    
+    @nticket = Nticket.where(:company_id => params[:company_id]).destroy_all
+    redirect_to(request.env['HTTP_REFERER']) 
+  end
+  
+  def close
+    @company_id = params[:company_id]
+    @company = Company.where(:id => params[:company_id])[0]
+    @company.openclose = "2"
+    @company.save
+    
+    redirect_to(request.env['HTTP_REFERER']) 
+
+  end
+
   def nticket_d
     @user = User.all
     @nticket = Nticket.all
+    @nticket_id = params[:nticket_id]
     @company = Company.all
     @company2 = params[:company_id]
     @nticket = params[:check_ids]
-    @nticket2 = Nticket.where("company_id LIKE ?",@company2)
-    @nticket.each do |n|
-      @nticket3 = @nticket2.where("user_id LIKE ?",n).destroy_all
-    end
-    
+    Nticket.where(:id => @nticket_id).destroy_all
     
     redirect_to(request.env['HTTP_REFERER'])
   end
@@ -194,7 +298,19 @@ class HomeController < ApplicationController
     @search2 = Company.where("name LIKE?","%#{@search}%")
   end
   
+  def app_search
+    @search = params[:search]
+    
+    @search2 = Company.where("name LIKE?","%#{@search}%")
+  end
+  
   def reservation
+    @company_id = params[:company_id]
+    
+    
+  end
+  
+  def app_reservation
     @company_id = params[:company_id]
     
     
@@ -210,7 +326,7 @@ class HomeController < ApplicationController
     reserve.requestmenu = params[:requestmenu]
     reserve.save
     
-    redirect_to "/home/index"
+    redirect_to(request.env['HTTP_REFERER'])
   end
   
   def reservation2

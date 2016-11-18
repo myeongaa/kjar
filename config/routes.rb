@@ -3,18 +3,31 @@ Rails.application.routes.draw do
  root 'home#index'
  
  get 'home/index'     #홈
+ get'home/app_index'
  get 'home/mypage/:user_id'=>"home#mypage"   #고객마이페이지
+ get 'home/app_mypage/:user_id' => "home#app_mypage"
  post 'home/mypage/:user_id'=>"home#mypage"
+ post 'home/app_mypage/:user_id' => "home#app_mypage"
+
  get 'home/mypage2/:user_id'=>"home#mypage2"
+  get 'home/app_mypage2/:user_id'=>"home#app_mypage2"
+
  get 'home/company_p/:company_id'=>"home#company_p"  #업체별페이지
+ get 'home/app_company_p/:company_id'=>"home#app_company_p"  #업체별페이지
+
  post 'home/company_p/:company_id'=>"home#company_p"  #업체별페이지
+ post 'home/app_company_p/:company_id'=>"home#app_company_p"  #업체별페이지
+
  get 'home/company' #업체관리페이지
  get 'home/company_add' #업체등록
  post 'home/company_add2' #업체등록2
  post 'home/sort_add'
  get 'home/sort_p/:csort_id' =>"home#sort_p" #분류별로업체봄
+ get 'home/app_sort_p/:csort_id' =>"home#app_sort_p" #분류별로업체봄
+
  post 'home/nticket'        #번호표뽑기
  get 'home/post'     #공지사항
+ get 'home/app_post'
  get 'home/post_write'  #공지사항올리기
  post 'home/post_write2' 
  get 'home/post_p/:post_id'=>"home#post_p"
@@ -22,15 +35,26 @@ Rails.application.routes.draw do
  get 'home/c_manage'
  post 'home/c_manage2'
  get 'home/market_p/:company_id' =>"home#market_p"
+ post 'home/market_p/:company_id' =>"home#market_p"
+ post 'home/open'
+ post 'home/close'
  post 'home/nticket_d'
  get 'home/admin'
  post 'home/search'
+ post 'home/app_search'
+ get 'home/real_nticket/:company_id'=>"home#real_nticket"
+ post 'home/real_nticket/:company_id'=>"home#real_nticket"
+ post 'home/real_nticket_add'
+
  post 'home/nticket_cancel'
  get 'home/reservation/:company_id' => "home#reservation"
+ get 'home/app_reservation/:company_id' => "home#app_reservation"
+
  post 'home/reservation_add'
  get 'home/reservation2/:reservation_id'=>"home#reservation2"
  post 'home/reserve_confirm'
  post 'home/reserve_reject'
+
  
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

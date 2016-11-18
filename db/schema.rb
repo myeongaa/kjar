@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20161114073343) do
     t.string   "opentime"
     t.string   "closetime"
     t.integer  "csort_id"
+    t.integer  "openclose",   default: 1
     t.integer  "nticket_max", default: 1
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
@@ -36,6 +37,8 @@ ActiveRecord::Schema.define(version: 20161114073343) do
   create_table "ntickets", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "company_id"
+    t.string   "user_name"
+    t.string   "user_phone"
     t.integer  "ticketnumber"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false

@@ -1,10 +1,11 @@
+
 <nav class="navbar navbar-fixed-top" role="navigation" style="background-color:#32495c;">
         <div class="container">
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-              <a href="/home/post">공지사항</a> |
+              <a href="/home/app_post">공지사항</a> |
               <% if user_signed_in? %>
                 <%= current_user.email   %>님 |
-                <a href="/home/mypage/<%= current_user.id %>" method="post">마이페이지</a> |
+                <a href="/home/app_mypage/<%= current_user.id %>" method="post">마이페이지</a> |
                 <%= link_to('로그아웃', destroy_user_session_path, :method => :get) %>  
               <% else %>
                 <%= link_to('로그인', new_user_session_path)  %>  
@@ -22,7 +23,7 @@
 <div style="text-align:center;" class="logo">
     </br>
     </br>
-    <a href="/home/index"><img src="/image/gggg.png"></a>
+    <a href="/home/app_index"><img src="/image/gggg.png"></a>
     </br>
     </br>
     <br><br>

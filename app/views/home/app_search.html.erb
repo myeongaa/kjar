@@ -1,10 +1,11 @@
+
 <nav class="navbar navbar-fixed-top" role="navigation" style="background-color:#32495c;">
         <div class="container">
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-              <a href="/home/post">공지사항</a> |
+              <a href="/home/app_post">공지사항</a> |
               <% if user_signed_in? %>
                 <%= current_user.email   %>님 |
-                <a href="/home/mypage/<%= current_user.id %>" method="post">마이페이지</a> |
+                <a href="/home/app_mypage/<%= current_user.id %>" method="post">마이페이지</a> |
                 <%= link_to('로그아웃', destroy_user_session_path, :method => :get) %>  
               <% else %>
                 <%= link_to('로그인', new_user_session_path)  %>  
@@ -22,21 +23,17 @@
 <div style="text-align:center;" class="logo">
     </br>
     </br>
-    <a href="/home/index"><img src="/image/gggg.png"></a>
+    <a href="/home/app_index"><img src="/image/gggg.png"></a>
     </br>
     </br>
     <br><br>
 </div>
 
-<form method="post" action="/home/post_write2">
-  <div class="form-group">
-    <label for="exampleInputEmail1">제목</label>
-    <input type="text" class="form-control" id="p_title" placeholder="제목" name="title">
-  </div>
-  <div class="form-group">
-    <label for="exampleInputEmail1">내용</label>
-    <textarea rows="4" cols="50" name="content" id="p_content"></textarea>
-  </div>
- 
-  <button type="submit" class="btn btn-default">Submit</button>
-</form>
+
+<% @search2.each do |s| %>
+    <div class="sortp-box">
+        <a href="/home/app_company_p/<%= s.id %>"><%= s.name %></a></br>
+        <%= s.c_address %>
+        <%= s.tel %>
+    </div>
+<% end %>
