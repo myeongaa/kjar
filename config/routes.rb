@@ -55,7 +55,16 @@ Rails.application.routes.draw do
  post 'home/reserve_confirm'
  post 'home/reserve_reject'
 
- 
+ get 'androidrequest/login_request'
+ get 'androidrequest/sort_request'
+ get 'androidrequest/company_request'
+ get 'androidrequest/nticket_request'
+ get 'androidrequest/reserve_request'
+ get 'androidrequest/mypage_request_nticket'
+ get 'androidrequest/mypage_request_reservation'
+ get 'androidrequest/signup_request'
+ get 'androidrequest/test'
+ get 'androidrequest/nticket_request_company'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

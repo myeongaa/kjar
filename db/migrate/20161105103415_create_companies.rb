@@ -11,6 +11,7 @@ class CreateCompanies < ActiveRecord::Migration
       t.integer :csort_id
       t.integer :openclose , default:"1"
       t.integer :nticket_max , default:"1"
+      t.integer :runtime, default:"0"
       t.timestamps null: false
     end
   end

@@ -23,9 +23,11 @@ class HomeController < ApplicationController
     @nticket2 = Nticket.where(:user_id => current_user)
     @nticket2.each do |n|
       @company << Company.where(:id => n.company_id)
+      
     end
     
     @reservation = Reservation.where(:user_id => current_user)
+    
     
     
   end
@@ -53,7 +55,7 @@ class HomeController < ApplicationController
   
   def mypage2
     @user = User.all
-    @user2 = User.whㄴㄴㄷㄴㄷㅁere("id LIKE ?",params[:user_id])[0]
+    @user2 = User.where("id LIKE ?",params[:user_id])[0]
     
   end
   
@@ -253,9 +255,12 @@ class HomeController < ApplicationController
     @company_id = params[:company_id]
     @company = Company.where(:id => params[:company_id])[0]
     @company.openclose = "1"
+    @company.nticket_max = 1;
     @company.save
     
-    @nticket = Nticket.where(:company_id => params[:company_id]).destroy_all
+    @nticket = Nticket.where(:company_id => @company_id).destroy_all
+    
+    
     redirect_to(request.env['HTTP_REFERER']) 
   end
   

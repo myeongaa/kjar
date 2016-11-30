@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 20161114073343) do
     t.integer  "csort_id"
     t.integer  "openclose",   default: 1
     t.integer  "nticket_max", default: 1
+    t.integer  "runtime",     default: 0
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
   end

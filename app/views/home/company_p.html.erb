@@ -1,21 +1,4 @@
-<nav class="navbar navbar-fixed-top" role="navigation" style="background-color:#32495c;">
-        <div class="container">
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-              <a href="/home/post">공지사항</a> |
-              <% if user_signed_in? %>
-                <%= current_user.email   %>님 |
-                <a href="/home/mypage/<%= current_user.id %>" method="post">마이페이지</a> |
-                <%= link_to('로그아웃', destroy_user_session_path, :method => :get) %>  
-              <% else %>
-                <%= link_to('로그인', new_user_session_path)  %>  
-              <% end %>       
-          </div>
-        </div>
-        
-        
-</nav>
-</br>
-</br>
+
 
 <br><br>
 
@@ -87,9 +70,14 @@
               *대기자*</br>
               <div class="ticket-people2">
               <% @nticket.each do |n| %>
-                <% @user.each do |u| %>
-                  <% if u.id == n.user_id %>
-                   <%= n.ticketnumber %>번 <%=  u.name %></br>
+                <% if n.user_id == 0 %>
+                  <%= n.ticketnumber %>번  <%= n.user_name %></br>
+                <% else %>
+                  <% @user.each do |u| %>
+                  
+                    <% if u.id == n.user_id %>
+                     <%= n.ticketnumber %>번 <%=  u.name %></br>
+                    <% end %>
                   <% end %>
                 <% end %>
               <% end %>

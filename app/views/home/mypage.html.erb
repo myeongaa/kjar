@@ -1,21 +1,4 @@
-<nav class="navbar navbar-fixed-top" role="navigation" style="background-color:#32495c;">
-        <div class="container">
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-              <a href="/home/post">공지사항</a> |
-              <% if user_signed_in? %>
-                <%= current_user.email   %>님 |
-                <a href="/home/mypage/<%= current_user.id %>" method="post">마이페이지</a> |
-                <%= link_to('로그아웃', destroy_user_session_path, :method => :get) %>  
-              <% else %>
-                <%= link_to('로그인', new_user_session_path)  %>  
-              <% end %>       
-          </div>
-        </div>
-        
-        
-</nav>
-</br>
-</br>
+
 
 <br><br>
 
@@ -30,7 +13,7 @@
 
 <div class="row" >
   <div class="col-md-2 "></div>
-  <div class="col-md-4" >
+  <div class="col-md-8" >
     <div class="mypage-box">
     <%= @c_user.email %></br>
     <%= @c_user.name %></br>
@@ -39,38 +22,105 @@
     <a href="/users/edit">회원정보수정</a>
     </div>
   </div>
-  <div class="col-md-4 " >
+  
+  <div class="col-md-2 "></div>
+</div>
+<div class="row">
+    <div class="col-md-2 "></div>
+
+  <div class="col-md-8 " >
     <div class="mypage-box">
       *현재 번호표*</br>
-     
+    
     <form method="post" >
+      <table >
+        <tr >
+          <th>업체이름</th>
+          <th>번호표번호</th>
+          <th>뽑은시간</th>
+          <th>남은인원</th>
+          <th>예상시간</th>
+          <th>취소</th>
+        </tr>
+        
+      
       <% @nticket2.each do |n| %>
         <% @com = Company.where(:id => n.company_id)[0].id %>
-        <%= Company.where(:id => n.company_id)[0].name %>
-        <%= (n.created_at+32400).strftime("%H:%M:%S") %>
-        <%= n.ticketnumber %>번
-        남은인원:<%= n.ticketnumber-Nticket.where(:company_id => @com)[0].ticketnumber%>명  
-        <input type="hidden" name="company_id" id="nt_company_id">
-        <% if n.ticketnumber-Nticket.where(:company_id => @com)[0].ticketnumber > 4 %>
-          <button type="submit" value="<%= Company.where(:id => n.company_id)[0].id %>" class="btn btn-default nticket_c">취소</button>
-         <% end %>
-        </br>
+        <% @count = 0 %>     
+        <% @ntickettime = 0 %>
+        <% @nticket3 = Nticket.where(:company_id => @com) %>
+        
+        <% @nticket3.each do |t| %>
+        
+          <% if t.user_id == current_user.id %>
+            <% @companytime = Company.where(:id => t.company_id )[0].runtime %>
+            <% if (Time.now - @nticket3[0].created_at) > @companytime %>
+              <% @onetime = 0 %>
+            <% else %>
+              <% @onetime = @companytime- (Time.now - @nticket3[0].created_at) %>
+            <% end %>
+            <% @time = Time.now %>
+            <% @ntickettime = @time+(@count*@companytime).to_i + @onetime +32400 %>
+          <% end %>
+          <% @count = @count + 1%>
+          
+        <% end %>
+         
+        <tr>
+          <td>
+            <%= Company.where(:id => n.company_id)[0].name %>
+          </td>
+          <td>
+            <%= n.ticketnumber %>번
+          </td>
+          <td>
+            <%= (n.created_at+32400).strftime("%H:%M:%S") %>
+          </td>
+          <td>
+            <% if n.ticketnumber-Nticket.where(:company_id => @com)[0].ticketnumber<5 %>
+              <span style="color:red;"><%= n.ticketnumber-Nticket.where(:company_id => @com)[0].ticketnumber%>명</span>
+            <% else%>
+              <%= n.ticketnumber-Nticket.where(:company_id => @com)[0].ticketnumber%>명
+
+            <% end %>
+          </td>
+          <td>
+             <%=@ntickettime.strftime("%H:%M:%S") %>
+          </td>
+          <td>
+            <input type="hidden" name="company_id" id="nt_company_id">
+            <% if n.ticketnumber-Nticket.where(:company_id => @com)[0].ticketnumber > 4 %>
+              <button type="submit" value="<%= Company.where(:id => n.company_id)[0].id %>" class="btn btn-default nticket_c">취소</button>
+             <% end %>
+          </td>
+        </tr>
+      
       <% end %>
+      </table>
       </form></br></br>
        <span style="color:red;">남은인원이 4명 이하일 때는 취소되지 않습니다.</span></br>
       </div>
       
   
     </div>
+      <div class="col-md-2 "></div>
+
   </div>
-  <div class="col-md-2 "></div>
-</div></br>
+</div>
 <div class="row">
   <div class="col-md-2 "></div>
   <div class="col-md-8 ">
     <div class="mypage-box">
-      
-        <% @reservation.each do |r| %>
+      *예약*
+      <table>
+        <tr>
+          <th>업체이름</th>
+          <th>예약날짜</th>
+          <th>예약시간</th>
+          <th>상태</th>
+          <th>전달사항</th>
+        </tr>
+      <% @reservation.each do |r| %>
         <% if r.confirm_num.to_s == "1" %>
           <% @a = "대기중 " %>
         <% elsif r.confirm_num.to_s == "2" %>
@@ -79,9 +129,20 @@
           <% @a ="거절" %>
         <% end %>
         
-          <%= Company.find_by_id(r.company_id).name %>  <%= r.reserve_date %>  <%= r.reserve_time %>  <%= @a %>  <%= r.comment %></br>
+        
+        <tr>
+          <td><%= Company.find_by_id(r.company_id).name %></td>
+          <td><%= r.reserve_date %></td>
+          <td><%= r.reserve_time %></td>
+          <td><%= @a %></td>
+          <td><%= r.comment %></td>
+        </tr>
+      
+        
+        
         
         <% end %>
+        </table>
         </br></br>
         <span style="color:red;">예약은 취소되지 않습니다.</span></br>
       </div>

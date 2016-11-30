@@ -317,7 +317,7 @@ html, body { width: 100%; height: 100%; }
 }
 .ticket-people2{
   overflow:scroll;
-  height: 100px;
+  height: 140px;
   margin-left: 100px;
   margin-right: 100px;
 }
@@ -344,7 +344,7 @@ html, body { width: 100%; height: 100%; }
 .mypage-box{
   border: 2px solid #cc6958;
   border-radius: 7px;
-  margin-top:20px;
+  margin-top:10px;
   width:100%;
   padding:20px;
   margin-left: 0px;
@@ -354,4 +354,15 @@ html, body { width: 100%; height: 100%; }
    #sort_p img{
      margin-bottom:30px;
    }
+}
+table{
+  margin:auto;
+  width:600px;
+  text-align: center;
+  border: 1px solid #bcbcbc;
+  
+}
+table th{
+  margin:auto;
+  text-align: center;
 }

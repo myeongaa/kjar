@@ -1,21 +1,4 @@
-<nav class="navbar navbar-fixed-top" role="navigation" style="background-color:#32495c;">
-        <div class="container">
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-              <a href="/home/post">공지사항</a> |
-              <% if user_signed_in? %>
-                <%= current_user.email   %>님 |
-                <a href="/home/mypage/<%= current_user.id %>" method="post">마이페이지</a> |
-                <%= link_to('로그아웃', destroy_user_session_path, :method => :get) %>  
-              <% else %>
-                <%= link_to('로그인', new_user_session_path)  %>  
-              <% end %>       
-          </div>
-        </div>
-        
-        
-</nav>
-</br>
-</br>
+
 
 <br><br>
 
@@ -50,7 +33,7 @@
 
         <form class="searchbox" action="/home/search" method="post">
             <div class="search">
-                <input type="text" id="searchb" name="search" placeholder="    업소명을 입력해주세요.">
+                <input type="text" id="searchb" name="search" placeholder="       업소명을 입력해주세요.">
                 <span><button type="image" id="searchimg" src="/image/search.png"><img src="/image/search.png"></button></span>     
             </div>
         </form>
@@ -59,15 +42,18 @@
 
 </div>
 
-<div class="row" id="sort_p">
-    <div class="col-sm-4 portfolio-item">
+<div class="row" id="sort_p" style="margin-right:80px; margin-left:80px;">
+    <div class="col-sm-3 portfolio-item">
       <a href="/home/sort_p/1"><span data-tooltip-text="병원"><img src="/image/hospital.png"></span></a>
     </div>
-    <div class="col-sm-4 portfolio-item">
+    <div class="col-sm-3 portfolio-item">
       <a href="/home/sort_p/2"><span data-tooltip-text="음식점"><img src="/image/restaurant.png"></span></a>
     </div>
-    <div class="col-sm-4 portfolio-item">
+    <div class="col-sm-3 portfolio-item">
       <a href="/home/sort_p/3"><span data-tooltip-text="미용실"><img src="/image/hair.png"></span></a>
+    </div>
+    <div class="col-sm-3 portfolio-item">
+      <a href="/home/sort_p/4"><span data-tooltip-text="은행"><img src="/image/bank.png"></span></a>
     </div>
 
 </div>
