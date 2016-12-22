@@ -1,0 +1,91 @@
+<!--<a href="#modalLayer" class="modalLink">간단한 모달 창 만들기</a>
+<div id="modalLayer">
+  <div class="modalContent">
+    <a href="#">안녕</a> 
+    <button type="button">닫기</button>
+  </div>
+</div>
+
+<a href="#modalLayer" class="modalLink">간단한 모달 창 만들기</a>
+<div id="modalLayer">
+  <div class="modalContent">
+    <a href="#">메롱</a> 
+    <button type="button">닫기</button>
+  </div>
+</div>
+-->
+<button class="mymodalLink" value="1">모달테스투</button>
+<div id="mymodalLayer_1" class="mymodalLayer">
+  <div class="mymodalContent" id="mymodalContent_1">
+    <a href="#">방가웡</a> 
+    <button type="button">닫기</button>
+  </div>
+</div>
+
+<button class="mymodalLink" value="2">모달테스투</button>
+<div id="mymodalLayer_2" class="mymodalLayer">
+  <div class="mymodalContent" id="mymodalContent_2">
+    <a href="#">안녕</a> 
+    <button type="button">닫기</button>
+  </div>
+</div>
+
+<button onclick="myFunction()" >모달테스틍</button>
+
+<script>
+$(function() {
+    $('.mymodalLink').click(function(){
+      //alert("Hello! I am an alert box!");
+    var modallinkvalue = this.value;
+    //alert(modallinkvalue);
+    $("#mymodalLayer_"+modallinkvalue).fadeIn("slow");
+    $(".mymodalContent > button").click(function(){
+        $("#mymodalLayer_"+modallinkvalue).fadeOut("slow");
+        $('.mymodalLink').focus();
+    });
+    });
+    
+   
+});
+function myFunction() {
+    
+}
+/*$(document).ready(function(){
+  $(".mymodalLink").click(function(){
+    modallinkvalue = $(".mymodalLink").val();
+    alert("안녕");
+    $("#mymodalLayer_"+modallinkvalue).fadeIn("slow");
+    $("#mymodalContent_"+modallinkvalue).({
+      "margin-top" : -$("#mymodalContent_"+modallinkvalue).outerWidth()/2, 
+      "margin-left" : -$("#mymodalContent_"+modallinkvalue).outerHeight()/2
+      
+    });
+    this.blur;
+    $("#mymodalContent_"+modallinkvalue+"> a").focus();
+    return false;
+  });
+//});
+*/
+
+ /*   $(document).ready(function(){
+  var modalLayer = $("#modalLayer");
+  var modalLink = $(".modalLink");
+  var modalCont = $(".modalContent");
+  var marginLeft = modalCont.outerWidth()/2;
+  var marginTop = modalCont.outerHeight()/2; 
+
+  modalLink.click(function(){
+    modalLayer.fadeIn("slow");
+    modalCont.css({"margin-top" : -marginTop, "margin-left" : -marginLeft});
+    $(this).blur();
+    $(".modalContent > a").focus(); 
+    return false;
+  });
+
+  $(".modalContent > button").click(function(){
+    modalLayer.fadeOut("slow");
+    modalLink.focus();
+  });		
+});
+*/
+</script>

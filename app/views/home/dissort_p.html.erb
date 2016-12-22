@@ -1,0 +1,45 @@
+<br><br>
+
+<div style="text-align:center;" class="logo">
+    </br>
+    </br>
+    <a href="/home/index"><img src="/image/gggg.png"></a>
+    </br>
+    </br>
+    <br><br>
+</div>
+
+<% @rad_per_deg = Math::PI / 180%>
+ <% @rm2 = 6371000%> 
+
+<% @dis.each do |d| %>
+<% @company_s.each do |c| %>
+                     <% @lat1_rad2, @lat2_rad2 = c.com_lat.to_f * @rad_per_deg, @lat.to_f * @rad_per_deg %>
+                     <% @lon1_rad2, @lon2_rad2 = c.com_lng.to_f * @rad_per_deg,@lng.to_f * @rad_per_deg%>
+                    <% @a2 = Math.sin((@lat2_rad2 - @lat1_rad2) / 2) ** 2 + Math.cos(@lat1_rad2) * Math.cos(@lat2_rad2) * Math.sin((@lon2_rad2 - @lon1_rad2) / 2) ** 2 %>
+                    <% @c2 = 2 * Math::atan2(Math::sqrt(@a2), Math::sqrt(1 - @a2))%>
+                    <% @dis2 = @rm2 * @c2%>
+        <% if @dis2.to_i == d%>
+            <% if c.openclose == 1 %>
+                <div class="sortp-box">
+                    <a href="/home/company_p/<%=c.id%>"><%= c.name %></a></br>
+                    <%= c.c_address %>
+                    <%= c.tel %>
+
+                </div>
+            <% else %>
+                <div class="sortp-box2">
+                    <span>*CLOSE*</span></br>
+                    <a href="/home/company_p/<%=c.id%>"><%= c.name %></a></br>
+                    <%= c.c_address %>
+                    <%= c.tel %>
+                    
+                </div>
+            <% end %>
+        <% end %>
+<% end %>
+<% end %>
+
+<script>
+    
+</script>

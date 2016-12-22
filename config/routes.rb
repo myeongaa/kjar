@@ -54,7 +54,10 @@ Rails.application.routes.draw do
  get 'home/reservation2/:reservation_id'=>"home#reservation2"
  post 'home/reserve_confirm'
  post 'home/reserve_reject'
-
+ get 'home/test'
+ post 'home/dissort_p/:csort_id' => "home#dissort_p"
+ get 'home/dissort_p/:csort_id' => "home#dissort_p"
+ 
  get 'androidrequest/login_request'
  get 'androidrequest/sort_request'
  get 'androidrequest/company_request'
@@ -65,6 +68,7 @@ Rails.application.routes.draw do
  get 'androidrequest/signup_request'
  get 'androidrequest/test'
  get 'androidrequest/nticket_request_company'
+ 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

@@ -43,6 +43,7 @@
         <div class="col-md-10 col-xs-10 col-sm-10" >
           <form method="post" action="/home/nticket" id="nticketsumbit">
             <div class="form-group">
+              
               <input type="hidden" class="form-control" value="<%= @company_p.id %>" name="company_id">
             </div>
             <div class="ticket-box">
@@ -50,7 +51,8 @@
               <% if @company_p.openclose == 1 %>
                   <% if user_signed_in? %>
                     <% if @nticket3 < 1 %>
-                    <button type="image" ><img src="/image/ticket.png"></button>
+                      <button type="image" ><img src="/image/ticket.png"></button>
+                      
                     <% else %>
                     <button type="image" disabled='disabled' ><img src="/image/no_ticket.png" style="opacity:0.5;"></button>
                     <% end %>
@@ -64,6 +66,7 @@
 
               <% end %>
               </br>
+              
               대기인원 : <%= @nticket.length %></br>
               <div class="ticket-people">
               
@@ -94,7 +97,7 @@
 
               <span style="color:red;">당일 예약은 불가능 합니다. 전날까지만 가능합니다.</span></br>
               <span style="color:red;">예약은 취소되지 않습니다.</span></br>
-              </br></br></br></br></br></br>
+           
             </div>
           </form>
         </div>
@@ -115,8 +118,8 @@
               <%= @company_p.opentime %> ~ <%= @company_p.closetime %></br></br>
               
               <img src="/image/map.png">지도<img src="/image/map.png"></br>
-              <div id="map-canvas" style="width:200px; height: 200px" title="도서관 위치입니다."></div> 
-
+              <div id="map-canvas" style="width:200px; height: 200px" title="업체 위치."></div> 
+    
           </div>
     </div>
     <div class="col-md-2 "></div>
@@ -125,6 +128,18 @@
  
  <script src="https://maps.googleapis.com/maps/api/js?callback=myMap"></script>
 <script>
+
+function mySubmit(index) {
+   var company_id = $('#company_id').val();
+      if (index == 1) {
+         
+        document.myForm.action='/home/nticket_d';  
+        
+      }
+      document.myForm.submit();
+      
+    }
+ 
       var caddress = $("#caddress").text();
 
  function initialize() {
@@ -179,4 +194,6 @@
     var c = confirm("번호표를 뽑겠습니까?");
     return c; //you can just return c because it will be true or false
 });
+
+
 </script>

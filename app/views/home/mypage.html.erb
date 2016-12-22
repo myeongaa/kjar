@@ -32,7 +32,7 @@
     <div class="mypage-box">
       *현재 번호표*</br>
     
-    <form method="post" >
+    <!--<form method="post" >-->
       <table >
         <tr >
           <th>업체이름</th>
@@ -41,12 +41,14 @@
           <th>남은인원</th>
           <th>예상시간</th>
           <th>취소</th>
+          <th>추천</th>
         </tr>
         
-      
+              <% @count2 = 0 %>
+
       <% @nticket2.each do |n| %>
         <% @com = Company.where(:id => n.company_id)[0].id %>
-        <% @count = 0 %>     
+        <% @count = 0 %>    
         <% @ntickettime = 0 %>
         <% @nticket3 = Nticket.where(:company_id => @com) %>
         
@@ -68,7 +70,7 @@
          
         <tr>
           <td>
-            <%= Company.where(:id => n.company_id)[0].name %>
+            <a href="/home/company_p/<%=Company.where(:id => n.company_id)[0].id %>"><%= Company.where(:id => n.company_id)[0].name %></a>
           </td>
           <td>
             <%= n.ticketnumber %>번
@@ -90,14 +92,55 @@
           <td>
             <input type="hidden" name="company_id" id="nt_company_id">
             <% if n.ticketnumber-Nticket.where(:company_id => @com)[0].ticketnumber > 4 %>
-              <button type="submit" value="<%= Company.where(:id => n.company_id)[0].id %>" class="btn btn-default nticket_c">취소</button>
+              <button type="submit" value="<%= Company.where(:id => n.company_id)[0].id %>" class="nticket_c" style="text-decoration: none;  border:none;  background-color: #de8d14;  color:#ffffff; margin-bottom:1px;">취소</button>
              <% end %>
           </td>
+          <td>
+            <input type="hidden" value="<%= @count2 %>">
+            <button class="mymodalLink" value="<%= @count2 %>"style="text-decoration: none;  border:none;  background-color: #263b78;  color:#ffffff; margin-bottom:1px;">보기</button>
+              <div id="mymodalLayer_<%= @count2 %>" class="mymodalLayer">
+                <div class="mymodalContent" id="mymodalContent_<%= @count2 %>" style="border:5px solid #263b78;">
+                  <a href="/home/company_p/<%=Company.where(:id => n.company_id)[0].id %>"><%=Company.where(:id => n.company_id)[0].name%></a> </br>
+                     
+                  <div sytle="line-height="15px;><label>
+                    <img src="/image/like.png" style="width:20px;"/><span style="font-size:20px; "> 추천장소 </span><img src="/image/like.png" style="width:20px;"/>
+                    </label></div>
+                     <% @nowtime = (Time.now+32400)%>  
+                                        <% @expecttime = @ntickettime %>
+                                <% @nowtime.strftime("%H:%M:%S") %>
+                  남은시간:<% @hour = ((@expecttime-@nowtime)/3600).to_i %>
+                          <% @minute = (((@expecttime-@nowtime)-@hour*3600)/60).to_i %>
+                          <% @second = ((@expecttime-@nowtime)-(@hour*3600)-(@minute*60)).to_i %>
+                          <%= @hour %>:<%= @minute %>:<%= @second%></br>
+                   <% @rad_per_deg = Math::PI / 180 %>
+                    <% @rm = 6371000 %> 
+                  <% @recommend.each do |r| %>
+                     <% @lat1_rad, @lat2_rad = r.lat.to_f * @rad_per_deg, Company.where(:id => n.company_id)[0].com_lat.to_f * @rad_per_deg %>
+                     <% @lon1_rad, @lon2_rad = r.lng.to_f * @rad_per_deg,Company.where(:id => n.company_id)[0].com_lng.to_f  * @rad_per_deg%>
+                    <% @a = Math.sin((@lat2_rad - @lat1_rad) / 2) ** 2 + Math.cos(@lat1_rad) * Math.cos(@lat2_rad) * Math.sin((@lon2_rad - @lon1_rad) / 2) ** 2 %>
+                    <% @c = 2 * Math::atan2(Math::sqrt(@a), Math::sqrt(1 - @a))%>
+                    <% @dis = @rm * @c%>
+                    <% if @dis < 1500 && r.re_runtime <= (@expecttime - @nowtime)%>
+                      <%= r.name %><%= @dis.round(2) %>m</br>
+                    <% end %>
+                  <% end %>
+                   
+                   
+                    
+                  <button type="button" style="text-decoration: none;  border: 3px solid #263b78;  background-color: #263b78;  color:#ffffff;">닫기</button>
+                </div>
+              </div>
+            
+
+            <% @count2 = @count2 + 1 %>
+            
+            
+          </td>
+
         </tr>
-      
       <% end %>
       </table>
-      </form></br></br>
+      <!--</form>--></br></br>
        <span style="color:red;">남은인원이 4명 이하일 때는 취소되지 않습니다.</span></br>
       </div>
       
@@ -107,6 +150,7 @@
 
   </div>
 </div>
+              
 <div class="row">
   <div class="col-md-2 "></div>
   <div class="col-md-8 ">
@@ -150,6 +194,25 @@
       <div class="col-md-2 "></div>
 </div>
 <script>
+$(function() {
+    $('.mymodalLink').click(function(){
+      //alert("Hello! I am an alert box!");
+    var modallinkvalue = this.value;
+    //alert(modallinkvalue);
+    $("#mymodalLayer_"+modallinkvalue).fadeIn("slow");
+    $(".mymodalContent > button").click(function(){
+        $("#mymodalLayer_"+modallinkvalue).fadeOut("slow");
+        $('.mymodalLink').focus();
+    });
+    $("#mymodalContent_"+modallinkvalue).css({
+     "margin-top" : -$("#mymodalContent_"+modallinkvalue).outerWidth()/2+100, 
+      "margin-left" : -$(".mypage-box").outerHeight()-100
+      
+    });
+    });
+    
+   
+});
 
 
 $(function() {
@@ -171,6 +234,25 @@ $(function() {
        
   })
 });
+  $(document).ready(function(){
+  var modalLayer = $("#modalLayer");
+  var modalLink = $(".modalLink");
+  var modalCont = $(".modalContent");
+  var marginLeft = modalCont.outerWidth()/2;
+  var marginTop = modalCont.outerHeight()/2; 
+  
+  modalLink.click(function(){
+    modalLayer.fadeIn("slow");
+    modalCont.css({"margin-top" : -marginTop, "margin-left" : -marginLeft});
+    $(this).blur();
+    $(".modalContent > a").focus(); 
+    return false;
+  });
 
- 
+  $(".modalContent > button").click(function(){
+    modalLayer.fadeOut("slow");
+    modalLink.focus();
+  });		
+});
+
 </script>

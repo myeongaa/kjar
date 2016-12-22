@@ -8,6 +8,8 @@ class CreateCompanies < ActiveRecord::Migration
       t.string :tel
       t.string :opentime
       t.string :closetime
+      t.string :com_lat, default:"35.969329"
+      t.string :com_lng, default:"126.957320"
       t.integer :csort_id
       t.integer :openclose , default:"1"
       t.integer :nticket_max , default:"1"

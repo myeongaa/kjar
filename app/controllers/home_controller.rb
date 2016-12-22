@@ -19,6 +19,7 @@ class HomeController < ApplicationController
     end
     
     @company = []
+    @recommend = Recommend.all
     @nticket = Nticket.all
     @nticket2 = Nticket.where(:user_id => current_user)
     @nticket2.each do |n|
@@ -134,6 +135,9 @@ class HomeController < ApplicationController
   def sort_p   #분류별로업체보기
     @sort = Csort.all
     @company_s = Company.where("csort_id LIKE ?",params[:csort_id])
+    @csort_id = params[:csort_id]
+    @lat = params[:lat]
+    @lng = params[:lng]
     
   end
   
@@ -361,5 +365,34 @@ class HomeController < ApplicationController
     
     redirect_to(request.env['HTTP_REFERER'])
   end
+  
+  def test
+  end
+  
+  def dissort_p
+     @sort = Csort.all
+    @company_s = Company.where("csort_id LIKE ?",params[:csort_id])
+    @csort_id = params[:csort_id]
+    
+    @lat = params[:lati]
+    @lng = params[:long]
+    @dis = []
+    @com = []
+    @rad_per_deg = Math::PI / 180
+    @rm = 6371000 
+    @company_s.each do |c|
+      @lat1_rad, @lat2_rad = c.com_lat.to_f * @rad_per_deg, @lat.to_f * @rad_per_deg 
+      @lon1_rad, @lon2_rad = c.com_lng.to_f * @rad_per_deg,@lng.to_f  * @rad_per_deg
+      @a = Math.sin((@lat2_rad - @lat1_rad) / 2) ** 2 + Math.cos(@lat1_rad) * Math.cos(@lat2_rad) * Math.sin((@lon2_rad - @lon1_rad) / 2) ** 2 
+      @c = 2 * Math::atan2(Math::sqrt(@a), Math::sqrt(1 - @a))
+      @dis << (@rm * @c).to_i
+      @com << c.id
+    end
+    
+    @dis = @dis.sort
+    @com = @com.sort
+    
+  end
+  
 
 end

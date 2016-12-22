@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161114073343) do
+ActiveRecord::Schema.define(version: 20161222125253) do
 
   create_table "companies", force: :cascade do |t|
     t.string   "name"
@@ -21,12 +21,14 @@ ActiveRecord::Schema.define(version: 20161114073343) do
     t.string   "tel"
     t.string   "opentime"
     t.string   "closetime"
+    t.string   "com_lat",     default: "35.969329"
+    t.string   "com_lng",     default: "126.957320"
     t.integer  "csort_id"
     t.integer  "openclose",   default: 1
     t.integer  "nticket_max", default: 1
     t.integer  "runtime",     default: 0
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
   end
 
   create_table "csorts", force: :cascade do |t|
@@ -53,6 +55,15 @@ ActiveRecord::Schema.define(version: 20161114073343) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "recommends", force: :cascade do |t|
+    t.string   "name"
+    t.string   "lat"
+    t.string   "lng"
+    t.integer  "re_runtime", default: 0
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
   create_table "reservations", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "company_id"
@@ -76,6 +87,12 @@ ActiveRecord::Schema.define(version: 20161114073343) do
 
   add_index "roles", ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
   add_index "roles", ["name"], name: "index_roles_on_name"
+
+  create_table "test_tests", force: :cascade do |t|
+    t.string   "n"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false

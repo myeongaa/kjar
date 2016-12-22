@@ -1,0 +1,31 @@
+
+
+<br><br>
+
+<div style="text-align:center;" class="logo">
+    </br>
+    </br>
+    <a href="/home/index"><img src="/image/gggg.png"></a>
+    </br>
+    </br>
+    <br><br>
+</div>
+
+    <% @company_s.each do |c| %>
+        <% if c.openclose == 1 %>
+            <div class="sortp-box">
+                <a href="/home/company_p/<%=c.id%>"><%= c.name %></a></br>
+                <%= c.c_address %>
+                <%= c.tel %>
+                
+            </div>
+        <% else %>
+            <div class="sortp-box2">
+                <span>*CLOSE*</span></br>
+                <a href="/home/company_p/<%=c.id%>"><%= c.name %></a></br>
+                <%= c.c_address %>
+                <%= c.tel %>
+                
+            </div>
+        <% end %>
+    <% end %>

@@ -10,22 +10,128 @@
     </br>
     <br><br>
 </div>
-
-    <% @company_s.each do |c| %>
-        <% if c.openclose == 1 %>
-            <div class="sortp-box">
-                <a href="/home/company_p/<%=c.id%>"><%= c.name %></a></br>
-                <%= c.c_address %>
-                <%= c.tel %>
-                
-            </div>
-        <% else %>
-            <div class="sortp-box2">
-                <span>*CLOSE*</span></br>
-                <a href="/home/company_p/<%=c.id%>"><%= c.name %></a></br>
-                <%= c.c_address %>
-                <%= c.tel %>
-                
-            </div>
+<form method="post" class="myform" name = "myForm" >
+    <div id="message" ></div>
+    <input type="hidden" value="<%= @csort_id %>" id="csort_id"%>
+    <input type="hidden" id="latitude" name="lati"/>
+    <input type="hidden" id="longitude" name="long"/>
+    <input type="button" id="distancebut" onclick="requestPosition()" value="거리순으로 보기"  style="text-decoration: none;  border: 3px solid #263b78;  background-color: #263b78;  color:#ffffff;"/> 
+</form>
+    <div id="hohoho">
+        <% @company_s.each do |c| %>
+            <% if c.openclose == 1 %>
+                <div class="sortp-box">
+                    <a href="/home/company_p/<%=c.id%>"><%= c.name %></a></br>
+                    <%= c.c_address %>
+                    <%= c.tel %>
+                    
+                </div>
+            <% else %>
+                <div class="sortp-box2">
+                    <span>*CLOSE*</span></br>
+                    <a href="/home/company_p/<%=c.id%>"><%= c.name %></a></br>
+                    <%= c.c_address %>
+                    <%= c.tel %>
+                    
+                </div>
+            <% end %>
         <% end %>
-    <% end %>
+    </div>
+    <div id="hahaha" >
+        <span><%= @lat %></span>
+        <%= @lng %>
+    </div>
+<script src="https://maps.googleapis.com/maps/api/js?callback=myMap"></script>
+ <script async defer src="https://maps.googleapis.com/maps/api/js?key={APP_KEY}"></script>
+<script>
+
+        function setText(val, e) {
+        document.getElementById(e).value = val;
+    }
+    
+    function insertText(val, e) {
+        document.getElementById(e).value += val;
+    }
+    
+    var nav = null; 
+    
+    function requestPosition() {
+      if (nav == null) {
+          nav = window.navigator;
+      }
+      if (nav != null) {
+          var geoloc = nav.geolocation;
+          if (geoloc != null) {
+              geoloc.getCurrentPosition(successCallback);
+          }
+          else {
+              alert("geolocation not supported");
+          }
+      }
+      else {
+          alert("Navigator not found");
+      }
+    }
+
+
+
+    
+    function successCallback(position)
+    {
+       setText(position.coords.latitude, "latitude");
+       setText(position.coords.longitude, "longitude");
+       var csort_id = $("#csort_id").val();
+       var lat = position.coords.latitude; // 위도
+        var lng = position.coords.longitude; // 경도
+       document.myForm.action='/home/dissort_p/'+csort_id;  
+    document.myForm.submit();
+
+       $.ajax({
+        method: "POST",
+        url: "/home/sort_p",
+        data: { lat: position.coords.latitude, lng: position.coords.longitude }
+     });
+    latval = document.getElementById('latitude').value;
+           if (latval.length >1 ){
+               $("#hohoho").hide();
+               $("#hahaha").show();
+           };
+    
+    var geocode = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+lat+","+lng;
+    
+    jQuery.ajax({
+        url: geocode,
+        type: 'POST',
+           success: function(myJSONResult){
+                    if(myJSONResult.status == 'OK') {
+                        var tag = "";
+                        var i;
+                         tag += myJSONResult.results[0].formatted_address+" <br />";
+                        
+                        document.getElementById("message").innerHTML = tag;
+                    } else if(myJSONResult.status == 'ZERO_RESULTS') {
+                        alert("지오코딩이 성공했지만 반환된 결과가 없음을 나타냅니다.\n\n이는 지오코딩이 존재하지 않는 address 또는 원격 지역의 latlng을 전달받는 경우 발생할 수 있습니다.")
+                    } else if(myJSONResult.status == 'OVER_QUERY_LIMIT') {
+                        alert("할당량이 초과되었습니다.");
+                    } else if(myJSONResult.status == 'REQUEST_DENIED') {
+                        alert("요청이 거부되었습니다.\n\n대부분의 경우 sensor 매개변수가 없기 때문입니다.");
+                    } else if(myJSONResult.status == 'INVALID_REQUEST') {
+                        alert("일반적으로 쿼리(address 또는 latlng)가 누락되었음을 나타냅니다.");
+                    }
+            }
+    });
+ 
+     
+
+googleapisView();
+
+    
+    }
+    
+   
+   $(function() {
+        $("#hahaha").hide();
+
+       
+   });
+</script>
